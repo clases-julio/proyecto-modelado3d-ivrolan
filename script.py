@@ -106,15 +106,24 @@ if __name__ == "__main__":
     
     # creacin escenario para hacer luego el render
     Objeto.crearCamara('Cam')
-    Especifico.posicionar('Cam', (5, -4,3))
+    Especifico.posicionar('Cam', (5, -4,2))
     
     Objeto.crearPuntoLuz('Punto')
-    Especifico.posicionar('Punto', (5,0,3))
-    
+    Especifico.posicionar('Punto', (2,-3,1))
+    bpy.context.object.data.energy = 140
+
     ## Creacion del objeto
     Objeto.crearCilindro('Cilindro')
     Especifico.rotar('Cilindro', (1.57, 0, 0))
     Especifico.escalar('Cilindro', (0.75, 0.75, 0.2))
+    Especifico.posicionar('Cilindro', (0, -1.5, 0))
+    
+    Objeto.crearCilindro('Cilindro2')
+    Especifico.rotar('Cilindro2', (1.57, 0, 0))
+    Especifico.escalar('Cilindro2', (0.25, 0.25, 0.4))
+    Especifico.posicionar('Cilindro2', (0, -1, 0))
+    
+    
     
     
     
