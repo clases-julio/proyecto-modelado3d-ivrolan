@@ -19,6 +19,17 @@ def borrarObjetos(): # Borrar todos los objetos
         bpy.ops.object.select_all(action='SELECT')
         bpy.ops.object.delete(use_global=False)
 
+def seleccionarVariosObjetos(nombresObj):
+    bpy.ops.object.select_all(action='DESELECT') # deseleccionamos todos...
+    for obj in nombresObj:
+        bpy.data.objects[obj].select_set(True)
+
+def unirObjetos(listObj, nombreUnion):
+    seleccionarVariosObjetos(listObj)
+    bpy.ops.object.join()
+    #print("funcionooo")
+    Activo.renombrar(nombreUnion)
+    #print("fin unirObjetos")
 '''****************************************************************'''
 '''Clase para realizar transformaciones sobre objetos seleccionados'''
 '''****************************************************************'''
@@ -96,6 +107,20 @@ class Objeto:
         bpy.ops.object.camera_add(enter_editmode=False, align='VIEW', location=(0, 0, 0), rotation=(1.29722, 0.0141782, 1.14368), scale=(1, 1, 1))
         Activo.renombrar(objName)
 
+def crearRueda(id):
+    Objeto.crearCilindro('Cilindro' + id)
+    Especifico.rotar('Cilindro'  + id, (1.57, 0, 0))
+    Especifico.escalar('Cilindro' + id, (0.75, 0.75, 0.2))
+    Especifico.posicionar('Cilindro' + id, (0, -0.5, 0))
+    
+    Objeto.crearCilindro('Cilindro2' + id)
+    Especifico.rotar('Cilindro2' + id, (1.57, 0, 0))
+    Especifico.escalar('Cilindro2' + id, (0.25, 0.25, 0.4))
+    Especifico.posicionar('Cilindro2' + id, (0, 0, 0))
+    
+    #seleccionarVariosObjetos(['Cilindro', 'Cilindro2'])
+    unirObjetos(['Cilindro' + id, 'Cilindro2' + id], 'Rueda' + id)
+    
 '''************'''
 ''' M  A  I  N '''
 '''************'''
@@ -112,16 +137,16 @@ if __name__ == "__main__":
     Especifico.posicionar('Punto', (2,-3,1))
     bpy.context.object.data.energy = 140
 
-    ## Creacion del objeto
-    Objeto.crearCilindro('Cilindro')
-    Especifico.rotar('Cilindro', (1.57, 0, 0))
-    Especifico.escalar('Cilindro', (0.75, 0.75, 0.2))
-    Especifico.posicionar('Cilindro', (0, -1.5, 0))
+    ## Creacion del objeto Rueda
+    crearRueda("1")
     
-    Objeto.crearCilindro('Cilindro2')
-    Especifico.rotar('Cilindro2', (1.57, 0, 0))
-    Especifico.escalar('Cilindro2', (0.25, 0.25, 0.4))
-    Especifico.posicionar('Cilindro2', (0, -1, 0))
+    Especifico.posicionar('Rueda1', (0, -1.5, 0))
+    
+    crearRueda("2")
+    
+    Especifico.rotar('Rueda2', (-1.57,0,0))
+    Especifico.posicionar('Rueda2', (0, 1.5, 0))
+    
     
     
     
