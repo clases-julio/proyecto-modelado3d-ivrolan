@@ -120,7 +120,10 @@ def crearRueda(id):
     
     #seleccionarVariosObjetos(['Cilindro', 'Cilindro2'])
     unirObjetos(['Cilindro' + id, 'Cilindro2' + id], 'Rueda' + id)
-    
+
+def crearLink(id):
+    Objeto.crearCubo('Link'+id)
+    Especifico.escalar('Link'+id, (1.3, 1, 4))
 '''************'''
 ''' M  A  I  N '''
 '''************'''
@@ -131,7 +134,7 @@ if __name__ == "__main__":
     
     # creacin escenario para hacer luego el render
     Objeto.crearCamara('Cam')
-    Especifico.posicionar('Cam', (5, -4,2))
+    Especifico.posicionar('Cam', (9.5, -5,3.5))
     
     Objeto.crearPuntoLuz('Punto')
     Especifico.posicionar('Punto', (2,-3,1))
@@ -142,13 +145,29 @@ if __name__ == "__main__":
     
     Especifico.posicionar('Rueda1', (0, -1.5, 0))
     
+    ## Creamos otra y la desplazamos y giramos
     crearRueda("2")
     
     Especifico.rotar('Rueda2', (-1.57,0,0))
     Especifico.posicionar('Rueda2', (0, 1.5, 0))
     
+    crearLink("11") # bottom left (11)link
+    
+    Especifico.rotar('Link11', (0,-1.57/2,0))
+    Especifico.posicionar('Link11', (-0.5, -1,0.5))
     
     
+    crearLink("12") # bottom left (11)link
     
+    Especifico.rotar('Link12', (0,-1.57/2,0))
+    Especifico.posicionar('Link12', (-0.5, 1,0.5))
+    
+    crearLink("21")
+    Especifico.rotar('Link21', (0,1.57/2,0))
+    Especifico.posicionar('Link21', (-0.5, -1,1.5))
+    
+    crearLink("22")
+    Especifico.rotar('Link22', (0,1.57/2,0))
+    Especifico.posicionar('Link22', (-0.5, 1,1.5))
     
     
