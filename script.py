@@ -131,6 +131,15 @@ def crearRueda(id):
     
     #seleccionarVariosObjetos(['Cilindro', 'Cilindro2'])
     unirObjetos(['Cilindro' + id, 'Cilindro2' + id], 'Rueda' + id)
+    
+    mat = bpy.data.materials.new(name='WheelMat')
+    mat.use_nodes = True
+    bpy.data.materials['WheelMat'].node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0, 0, 0, 1)
+
+    bpy.context.collection.objects['Rueda' + id].data.materials.append(bpy.data.materials.get('WheelMat'))
+
+    
+    
 
 def crearLink(id):
     Objeto.crearCubo('Link'+id)
@@ -170,6 +179,12 @@ def crearLink(id):
     
     activarObjeto('Link'+id)
     Activo.diferencia('Link'+id, "RestaLateral", True)
+    
+    activarObjeto('Link'+id)
+    mat = bpy.data.materials.new(name='LinkMat')
+    mat.use_nodes = True
+    bpy.data.materials['LinkMat'].node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0.603816, 0, 0.0261152, 1)
+    bpy.context.collection.objects['Link'+id].data.materials.append(bpy.data.materials.get('LinkMat'))
 
 def crearCabeza(id):
     
@@ -201,10 +216,13 @@ def crearCabeza(id):
     seleccionarObjeto("Head"+id)
     activarObjeto("Head"+id)
     unirObjetos([ "HeadCubeSuma"+id,"HeadCubeSuma2"+id , "Head"+id], "Head"+id)
-    #Especifico.posicionar("HeadCubeResta"+id, (-0.4, 1, -0.7))
     
-    #activarObjeto("Head"+id)
-    #Activo.diferencia("Head"+id, "HeadCubeResta"+id, True)
+    mat = bpy.data.materials.new(name='HeadMat')
+    mat.use_nodes = True
+    bpy.data.materials['HeadMat'].node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0.07, 0.07, 0.07, 1)
+
+    bpy.context.collection.objects['Head' + id].data.materials.append(bpy.data.materials.get('HeadMat'))
+
     
 '''************'''
 ''' M  A  I  N '''
