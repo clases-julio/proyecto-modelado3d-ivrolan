@@ -5,14 +5,15 @@ import bpy
 '''*********************************************************************'''
 def seleccionarObjeto(nombreObjeto): # Seleccionar un objeto por su nombre
     bpy.ops.object.select_all(action='DESELECT') # deseleccionamos todos...
-    bpy.data.objects[nombreObjeto].select = True # ...excepto el buscado
+    bpy.data.objects[nombreObjeto].select_set(True)# ...excepto el buscado
 
 def activarObjeto(nombreObjeto): # Activar un objeto por su nombre
-    bpy.context.scene.objects.active = bpy.data.objects[nombreObjeto]
+    bpy.context.view_layer.objects.active = bpy.data.objects[nombreObjeto]
 
 def borrarObjeto(nombreObjeto): # Borrar un objeto por su nombre
     seleccionarObjeto(nombreObjeto)
-    bpy.ops.object.delete(use_global=False)
+    bpy.ops.object.delete(use_global=False, confirm=False)
+
 
 def borrarObjetos(): # Borrar todos los objetos
     if(len(bpy.data.objects) != 0):
@@ -65,6 +66,16 @@ class Activo:
 
     def renombrar(nombreObjeto):
         bpy.context.object.name = nombreObjeto
+    def diferencia(nombreObjeto, nombreResta, borrarObjetoResta):
+        bpy.ops.object.modifier_add(type='BOOLEAN')
+        bpy.context.object.modifiers["Boolean"].operation = 'DIFFERENCE'
+        bpy.context.object.modifiers["Boolean"].object = bpy.data.objects[nombreResta]
+        bpy.context.object.modifiers["Boolean"].use_hole_tolerant = True
+        bpy.ops.object.modifier_apply(modifier="Boolean")
+        
+        if borrarObjetoResta:
+            borrarObjeto(nombreResta)
+
 
 '''**************************************************************'''
 '''Clase para realizar transformaciones sobre objetos específicos'''
@@ -124,6 +135,42 @@ def crearRueda(id):
 def crearLink(id):
     Objeto.crearCubo('Link'+id)
     Especifico.escalar('Link'+id, (1.3, 1, 4))
+    
+    Objeto.crearCubo("RestaSuperior")
+    Especifico.escalar("RestaSuperior", (1.4, 0.6, 1.8))
+    Especifico.posicionar("RestaSuperior", (0,0, 0.8))
+    
+    activarObjeto('Link'+id)
+    Activo.diferencia('Link'+id, "RestaSuperior", True)
+    
+    Objeto.crearCubo("RestaInferior")
+    Especifico.escalar("RestaInferior", (1.4, 2, 1.2))
+    #Especifico.posicionar("RestaSuperior", (0,0, 0.8))
+    Objeto.crearCilindro("CilindroResta")
+    Especifico.escalar("CilindroResta", (0.3, 0.3, 0.6))
+    Especifico.rotar("CilindroResta", (1.57, 0,0))
+    Especifico.posicionar("CilindroResta", (0,0,0.24))
+    
+    activarObjeto("RestaInferior")
+    Activo.diferencia("RestaInferior", "CilindroResta", True)
+    
+    Especifico.posicionar("RestaInferior", (0, 0, -0.9))
+    
+    activarObjeto('Link'+id)
+    Activo.diferencia('Link'+id, "RestaInferior", True)
+    
+    Objeto.crearCubo("RestaLateral")
+    Especifico.escalar("RestaLateral", (1.4, 0.6, 1.5))
+    Especifico.posicionar("RestaLateral", (0, -0.27, -0.6))
+    
+    activarObjeto('Link'+id)
+    Activo.diferencia('Link'+id, "RestaLateral", False)
+    
+    Especifico.posicionar("RestaLateral", (0, 0.27, -0.6))
+    
+    activarObjeto('Link'+id)
+    Activo.diferencia('Link'+id, "RestaLateral", True)
+    
 '''************'''
 ''' M  A  I  N '''
 '''************'''
@@ -169,5 +216,7 @@ if __name__ == "__main__":
     crearLink("22")
     Especifico.rotar('Link22', (0,1.57/2,0))
     Especifico.posicionar('Link22', (-0.5, 1,1.5))
+    
+    
     
     
