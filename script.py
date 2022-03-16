@@ -70,7 +70,7 @@ class Activo:
         bpy.ops.object.modifier_add(type='BOOLEAN')
         bpy.context.object.modifiers["Boolean"].operation = 'DIFFERENCE'
         bpy.context.object.modifiers["Boolean"].object = bpy.data.objects[nombreResta]
-        bpy.context.object.modifiers["Boolean"].use_hole_tolerant = True
+        #bpy.context.object.modifiers["Boolean"].use_hole_tolerant = True
         bpy.ops.object.modifier_apply(modifier="Boolean")
         
         if borrarObjetoResta:
@@ -170,6 +170,41 @@ def crearLink(id):
     
     activarObjeto('Link'+id)
     Activo.diferencia('Link'+id, "RestaLateral", True)
+
+def crearCabeza(id):
+    
+    Objeto.crearCubo("HeadCube"+id)
+    
+    width_head = 6.5
+    
+    Especifico.escalar("HeadCube"+id, (4,width_head, 3))
+    
+    Objeto.crearCilindro("HeadCylinder"+id)
+    Especifico.escalar("HeadCylinder"+id, (0.75, 0.75, width_head/4))
+    Especifico.rotar("HeadCylinder"+id, (1.57, 0, 0)) 
+    Especifico.posicionar("HeadCylinder"+id, (0.9, 0, 0))
+    
+    unirObjetos(["HeadCube"+id,"HeadCylinder"+id ], "Head"+id)
+    
+    Objeto.crearCubo("HeadCubeSuma"+id)
+    Especifico.escalar("HeadCubeSuma"+id, (5, 1.1, 1))
+    
+    Especifico.posicionar("HeadCubeSuma"+id, (0.5, -1, 0.1))
+    
+    Objeto.crearCubo("HeadCubeSuma2"+id)
+    Especifico.escalar("HeadCubeSuma2"+id, (5, 1.1, 1))
+    
+    Especifico.posicionar("HeadCubeSuma2"+id, (0.5, 1, 0.1))
+    
+    
+    
+    seleccionarObjeto("Head"+id)
+    activarObjeto("Head"+id)
+    unirObjetos([ "HeadCubeSuma"+id,"HeadCubeSuma2"+id , "Head"+id], "Head"+id)
+    #Especifico.posicionar("HeadCubeResta"+id, (-0.4, 1, -0.7))
+    
+    #activarObjeto("Head"+id)
+    #Activo.diferencia("Head"+id, "HeadCubeResta"+id, True)
     
 '''************'''
 ''' M  A  I  N '''
@@ -217,6 +252,8 @@ if __name__ == "__main__":
     Especifico.rotar('Link22', (0,1.57/2,0))
     Especifico.posicionar('Link22', (-0.5, 1,1.5))
     
+    crearCabeza("1")
     
+    Especifico.posicionar("Head1", (0.6,0,2.5))
     
     
